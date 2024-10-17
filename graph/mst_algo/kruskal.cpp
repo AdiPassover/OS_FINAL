@@ -1,5 +1,5 @@
 #include "MST_algorithms.hpp"
-#include "data_structures/union_find.hpp"
+#include "../../data_structures/union_find.hpp"
 #include <vector>
 #include <list>
 #include <algorithm>

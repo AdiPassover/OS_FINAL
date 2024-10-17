@@ -6,9 +6,20 @@
 #include <climits>
 
 class FibonacciHeap { // TODO maybe switch to template
+public:
+    FibonacciHeap();
+    ~FibonacciHeap();
+
+    void insert(unsigned int vertex);
+    unsigned int min() const;
+    unsigned int delete_min();
+    void decrease_key(unsigned int vertex, int new_key);
+    bool contains(unsigned int vertex) const;
+    bool empty() const;
+
 private:
     struct Node {
-        const unsigned int _vertex;
+        unsigned int _vertex;
         Node* _parent;
         Node* _left;
         Node* _right;
@@ -17,31 +28,25 @@ private:
         unsigned int _degree;
         bool _is_marked;
 
-        inline explicit  Node(unsigned int vertex, int key = INT_MAX) : _vertex(vertex), _key(key), _degree(0), _is_marked(false),
-                                                       _parent(nullptr), _left(this), _right(this), _child(nullptr) {}
+        inline explicit Node(unsigned int vertex, int key = INT_MAX) : _vertex(vertex), _parent(nullptr), _left(this),
+                                                                       _right(this), _child(nullptr), _key(key),
+                                                                       _degree(0), _is_marked(false) {}
         ~Node();
+
+        void free_children();
     };
 
-public:
-    FibonacciHeap();
-    ~FibonacciHeap();
-
-    void insert(unsigned int vertex);
-    unsigned int delete_min();
-    void decrease_key(unsigned int vertex, int new_key);
-    bool contains(unsigned int vertex) const;
-    bool is_empty() const;
-
-private:
-    std::unordered_map<unsigned int, Node*> _nodes;
-    Node* _min;
     unsigned int _size;
-    std::vector<Node*> _consolidation_array;
+    Node* _min;
+    std::unordered_map<unsigned int, Node*> _nodes;
+    std::vector<Node*> _node_of_degree; // for consolidate
 
-    void consolidate();
+    void consolidate(Node* start);
 
-    void insert_next_to_min(Node* node);
+    static void insert_left_to_node(Node* inserted_node, Node* node);
+    void insert_left_to_min(Node* node);
     void promote_child(Node* child);
+    Node* merge(Node* node1, Node* node2); // returns the parent node
 
 };
 

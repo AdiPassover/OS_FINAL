@@ -1,7 +1,7 @@
 #ifndef OS_FINAL_MST_ALGORITHM_HPP
 #define OS_FINAL_MST_ALGORITHM_HPP
 
-#include "tree.hpp"
+#include "../tree.hpp"
 
 class MST_algorithm {
 public:
