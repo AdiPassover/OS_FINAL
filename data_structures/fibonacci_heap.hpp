@@ -5,6 +5,8 @@
 #include <unordered_map>
 #include <climits>
 
+#include <string>
+
 class FibonacciHeap { // TODO maybe switch to template
 public:
     FibonacciHeap();
@@ -17,9 +19,12 @@ public:
     bool contains(unsigned int vertex) const;
     bool empty() const;
 
+    std::string to_string() const;
+    void print_nodes() const;
+
 private:
     struct Node {
-        unsigned int _vertex;
+        const unsigned int _vertex;
         Node* _parent;
         Node* _left;
         Node* _right;
@@ -34,6 +39,7 @@ private:
         ~Node();
 
         void free_children();
+        std::string to_string() const;
     };
 
     unsigned int _size;

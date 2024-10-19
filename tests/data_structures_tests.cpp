@@ -42,25 +42,76 @@ TEST_CASE("Union find") {
 }
 
 TEST_CASE("Fibonacci heap") {
-    FibonacciHeap heap;
-    CHECK(heap.empty());
-    CHECK_THROWS(heap.delete_min());
-    CHECK_THROWS(heap.min());
+    SUBCASE("Simple") {
+        FibonacciHeap heap;
+        CHECK(heap.empty());
+        CHECK_THROWS(heap.delete_min());
+        CHECK_THROWS(heap.min());
 
-    for (unsigned int i = 0; i < 3; i++)
-        heap.insert(i);
-    CHECK_FALSE(heap.empty());
+        for (unsigned int i = 0; i < 3; i++)
+            heap.insert(i);
+        CHECK_FALSE(heap.empty());
 
-    heap.decrease_key(0, 20);
-    CHECK(heap.min() == 0);
-    CHECK_THROWS(heap.decrease_key(0, 21));
-    heap.decrease_key(1, 15);
-    CHECK(heap.min() == 1);
-    heap.decrease_key(2, 25);
-    CHECK(heap.min() == 1);
-    std::cout << "TEST: deleting min" << std::endl;
-//    CHECK(heap.delete_min() == 1);
-    std::cout << "TEST: deleted min" << std::endl;
-//    CHECK(heap.min() == 0);
+        heap.decrease_key(0, 3);
+        CHECK(heap.min() == 0);
+        CHECK_THROWS(heap.decrease_key(0, 4));
+        heap.decrease_key(1, 2);
+        CHECK(heap.min() == 1);
+        heap.decrease_key(2, 4);
+        CHECK(heap.min() == 1);
+        CHECK(heap.delete_min() == 1);
+        CHECK(heap.min() == 0);
+        CHECK(heap.delete_min() == 0);
+        CHECK(heap.min() == 2);
+        CHECK(heap.delete_min() == 2);
+        CHECK(heap.empty());
+    }
 
+    SUBCASE("Exiting with non-empty") {
+        FibonacciHeap heap;
+        for (unsigned int i = 0; i < 10; i++)
+            heap.insert(i);
+        heap.decrease_key(3, 2);
+        CHECK(heap.delete_min() == 3);
+    }
+
+    SUBCASE("Complex") {
+        FibonacciHeap heap;
+        for (unsigned int i = 0; i < 10; i++)
+            heap.insert(i);
+        heap.decrease_key(0, 0);
+        CHECK(heap.delete_min() == 0);
+        heap.decrease_key(2, 1);
+        CHECK(heap.min() == 2);
+        heap.decrease_key(3, 0);
+        CHECK(heap.min() == 3);
+        CHECK(heap.delete_min() == 3);
+        CHECK(heap.min() == 2);
+        CHECK(heap.delete_min() == 2);
+        heap.decrease_key(6,3);
+        CHECK(heap.min() == 6);
+        heap.decrease_key(5, 5);
+        CHECK(heap.min() == 6);
+        CHECK(heap.delete_min() == 6);
+
+        heap.decrease_key(1, -2);
+        CHECK(heap.min() == 1);
+        heap.decrease_key(4, 0);
+        CHECK(heap.min() == 1);
+        heap.decrease_key(8, 0);
+        CHECK(heap.min() == 1);
+        heap.decrease_key(7, 0);
+        CHECK(heap.min() == 1);
+        heap.decrease_key(7, -9);
+        CHECK_THROWS(heap.decrease_key(7, -1));
+        CHECK(heap.delete_min() == 7);
+        heap.decrease_key(8,-1);
+        CHECK(heap.delete_min() == 1);
+        CHECK(heap.delete_min() == 8);
+        CHECK(heap.delete_min() == 4);
+        CHECK(heap.delete_min() == 5);
+        CHECK(heap.delete_min() == 9);
+        CHECK(heap.empty());
+//        CHECK_THROWS(heap.delete_min());
+    }
 }

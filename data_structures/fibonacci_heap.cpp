@@ -6,13 +6,11 @@
 FibonacciHeap::FibonacciHeap() : _size(0), _min(nullptr), _nodes(), _node_of_degree(1) {}
 
 FibonacciHeap::~FibonacciHeap() {
-    std::cout << "deleting heap" << std::endl;
-    if (_min != nullptr) {
+    if (_size != 0 && _min != nullptr) {
         Node* current = _min;
         do {
             Node* temp = current;
             current = current->_right;
-            temp->free_children();
             delete temp;
         } while (current != _min);
     }
@@ -46,10 +44,9 @@ void FibonacciHeap::insert_left_to_min(FibonacciHeap::Node *node) {
 }
 
 unsigned int FibonacciHeap::delete_min() {
-    if (_min == nullptr) throw std::logic_error("Heap is empty");
+    if (_size == 0) throw std::logic_error("Heap is empty");
 
     // Make min's children new roots
-    std::cout << "promoting min's children" << std::endl;
     if (_min->_degree == 1) {
         insert_left_to_min(_min->_child);
     } else if (_min->_degree > 1) {
@@ -63,7 +60,6 @@ unsigned int FibonacciHeap::delete_min() {
     }
 
     // Delete min
-    std::cout << "deleting min" << std::endl;
     unsigned int min_vertex = _min->_vertex;
     Node* right = _min->_right;
     if (right != _min) {
@@ -71,6 +67,7 @@ unsigned int FibonacciHeap::delete_min() {
         right->_left = left;
         left->_right = right;
     }
+    _nodes[_min->_vertex] = nullptr;
     _nodes.erase(_min->_vertex);
     _min->_child = nullptr;
     if (_node_of_degree[_min->_degree] == _min)
@@ -78,15 +75,16 @@ unsigned int FibonacciHeap::delete_min() {
     delete _min;
     _size--;
 
-    std::cout << "consolidating" << std::endl;
     if (_size != 0)
         consolidate(right);
     return min_vertex;
 }
 
 void FibonacciHeap::promote_child(FibonacciHeap::Node *child) {
-    if (child->_key < _min->_key) _min = child;
-    if (child->_parent == nullptr) return;
+    if (child->_parent == nullptr) {
+        if (_min->_key > child->_key) _min = child;
+        return;
+    }
     Node* parent = child->_parent;
 
     // Remove child from parent's children and then insert it as a new root
@@ -113,40 +111,45 @@ void FibonacciHeap::decrease_key(unsigned int vertex, int new_key) {
     Node* node = _nodes[vertex];
     if (new_key > node->_key) throw std::logic_error("New key is greater than current key");
     node->_key = new_key;
-    if (new_key < _min->_key) _min = node;
-    if (node->_parent == nullptr || node->_parent->_key <= new_key) return;
-    promote_child(node);
+    if (node->_parent == nullptr) {
+        if (new_key < _min->_key) _min = node;
+    }
+    else if (node->_parent->_key > new_key) {
+        promote_child(node);
+    }
 }
 
 void FibonacciHeap::consolidate(Node* start) {
     _min = start;
     Node* current = start;
 
-    while (true) {
-        std::cout << "current: " << current->_vertex << std::endl;
-        for (unsigned int i = 0; i < _node_of_degree.size(); i++) {
-            if (_node_of_degree[i] != nullptr) {
-                std::cout << "degree " << i << ": " << _node_of_degree[i]->_vertex << " ";
-            }
-        } std::cout << std::endl;
+    bool finished = false;
+    while (!finished) {
         if (current->_key < _min->_key)
             _min = current;
         Node* next = current->_right;
+        finished = (next == start);
+//        std::cout << "current: " << current->_vertex << " next: " << next->_vertex << " start: " << start->_vertex << std::endl;
+//        std::cout << to_string() << std::endl;
+//        print_nodes();
 
         unsigned int degree = current->_degree;
-        if (_node_of_degree.size() <= degree) {std::cout<<"resizing"<<std::endl; _node_of_degree.resize((degree+1)*2);}
+        if (_node_of_degree.size() <= degree) { _node_of_degree.resize((degree+1)*2); }
         if (_node_of_degree[degree] == nullptr) {
             _node_of_degree[degree] = current;
         } else if (_node_of_degree[degree] != current) {
+//            std::cout << "merge: " << current->_vertex << " " << _node_of_degree[degree]->_vertex << std::endl;
             next = merge(_node_of_degree[degree], current);
-            if (_node_of_degree.size() <= next->_degree) {std::cout<<"resizing"<<std::endl; _node_of_degree.resize((next->_degree+1)*2);}
+            if (_min == current || _min == _node_of_degree[degree]) _min = next;
+            start = next->_left;
+            finished = false;
+            if (_node_of_degree.size() <= next->_degree) { _node_of_degree.resize((next->_degree+1)*2); }
             if (_node_of_degree[next->_degree] == nullptr)
                 _node_of_degree[next->_degree] = next;
             _node_of_degree[degree] = nullptr;
         }
 
         current = next;
-        if (current == start) break;
     }
 }
 
@@ -170,6 +173,7 @@ FibonacciHeap::Node* FibonacciHeap::merge(FibonacciHeap::Node *node1, FibonacciH
     child_node->_parent = parent_node;
     if (parent_node->_child == nullptr) {
         parent_node->_child = child_node;
+        child_node->_left = child_node->_right = child_node;
     } else {
         insert_left_to_node(child_node, parent_node->_child);
     }
@@ -183,8 +187,29 @@ unsigned int FibonacciHeap::min() const {
     return _min->_vertex;
 }
 
+std::string FibonacciHeap::to_string() const {
+    std::string str1;
+    std::string str2;
+    std::string str3;
+    for (const auto& [vertex, node] : _nodes) {
+        std::string parent = (node->_parent == nullptr) ? "-" : std::to_string(node->_parent->_vertex);
+        str1 += " " + parent + "  ";
+        str2 += " ^  ";
+        std::string key = (node->_key == INT_MAX) ? "$" : std::to_string(node->_key);
+        char mark = (node->_is_marked) ? '!' : ':';
+        str3 += std::to_string(vertex) + mark + key + " ";
+    }
+    std::string title = "heap min: " + std::to_string(_min->_vertex) + " size: " + std::to_string(_size);
+    return title + "\n" + str1 + "\n" + str2 + "\n" + str3;
+}
+
+void FibonacciHeap::print_nodes() const {
+    for (const auto& [vertex, node] : _nodes) {
+        std::cout << node->to_string();
+    }
+}
+
 FibonacciHeap::Node::~Node() {
-    std::cout << "deleting node " << _vertex << std::endl;
     free_children();
 }
 
@@ -193,9 +218,26 @@ void FibonacciHeap::Node::free_children() {
         Node* child = _child;
         do {
             Node* next = child->_right;
-            child->free_children();
+//            child->free_children();
             delete child;
             child = next;
         } while (child != _child);
     }
+}
+
+std::string FibonacciHeap::Node::to_string() const {
+    std::string parent = (_parent == nullptr) ? "-" : std::to_string(_parent->_vertex);
+    std::string key = (_key == INT_MAX) ? "$" : std::to_string(_key);
+    char mark = (_is_marked) ? '!' : ':';
+    std::string child = (_child == nullptr) ? "-" : std::to_string(_child->_vertex);
+    std::string value = std::to_string(_vertex);
+    std::string left = std::to_string(_left->_vertex);
+    std::string right = std::to_string(_right->_vertex);
+
+    std::string ans = "  " + parent + "  \n" +
+                      "  " +   "^"  + "  \n" +
+                      left+"<"+value+mark+key+">"+right+"\n" +
+                      "  " +   "v"  + "  \n" +
+                        "  " + child + "  \n";
+    return ans;
 }
