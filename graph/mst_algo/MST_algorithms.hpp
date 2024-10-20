@@ -5,16 +5,16 @@
 
 class MST_algorithm {
 public:
-    virtual const Tree& find_MST(const Graph&) const = 0;
+    virtual Tree find_MST(const Graph&) const = 0;
     virtual ~MST_algorithm() = default;
 };
 
 class Kruskal : public MST_algorithm {
-    const Tree& find_MST(const Graph&) const override;
+    Tree find_MST(const Graph&) const override;
 };
 
 class Prim : public MST_algorithm {
-    const Tree& find_MST(const Graph&) const override;
+    Tree find_MST(const Graph&) const override;
 };
 
 

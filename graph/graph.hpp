@@ -4,7 +4,7 @@
 #include <vector>
 #include <climits>
 
-inline const int NO_EDGE = INT_MIN;
+inline constexpr int NO_EDGE = INT_MIN;
 
 class Edge {
 public:
@@ -13,6 +13,7 @@ public:
     inline unsigned int u() const { return _u; }
     inline unsigned int v() const { return _v; }
     inline int weight() const { return _weight; }
+    inline unsigned int get_other(unsigned int vertex) const { return vertex == _u ? _v : _u; }
 
     bool operator<(const Edge&) const;
 
@@ -26,6 +27,7 @@ private:
 class Graph {
 public:
     explicit Graph(unsigned int n = 0);
+    Graph(unsigned int num_vertices, unsigned int num_edges, int seed);
 
     unsigned int num_vertices() const;
 

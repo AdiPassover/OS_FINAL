@@ -4,11 +4,12 @@
 #include <list>
 #include <algorithm>
 
-const Tree& Kruskal::find_MST(const Graph &graph) const {
+Tree Kruskal::find_MST(const Graph &graph) const {
     std::vector<Edge> edges;
     for (unsigned int i = 0; i < graph.num_vertices()-1; i++) {
         for (unsigned int j = i+1; j < graph.num_vertices(); j++) {
-            edges.emplace_back(i, j, graph.get_weight(i, j));
+            if (graph.has_edge(i, j))
+                edges.emplace_back(i, j, graph.get_weight(i, j));
         }
     }
     std::sort(edges.begin(), edges.end());
@@ -23,5 +24,5 @@ const Tree& Kruskal::find_MST(const Graph &graph) const {
         }
     }
 
-    return {mst};
+    return Tree(mst);
 }

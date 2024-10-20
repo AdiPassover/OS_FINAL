@@ -6,8 +6,8 @@
 
 class Tree {
 public:
-    Tree(const std::list<Edge> &edges);
-    Tree(const std::vector<unsigned int> &parents);
+    explicit Tree(const std::list<Edge> &edges);
+    Tree(const std::vector<unsigned int> &parents, const std::vector<int> & parent_weight);
 
     int get_weight() const;
     int get_shortest_distance() const;
@@ -15,12 +15,13 @@ public:
     int get_longest_distance() const;
 
 private:
-    const Graph _tree;
+    const unsigned int _num_vertices;
     std::vector<std::vector<int>> _dist_matrix;
     int _weight;
 
-    void init_distances();
-    void bfs(unsigned int src);
+    void init_distances(const std::vector<std::list<Edge>> &adj_list);
+    void bfs(unsigned int src, const std::vector<std::list<Edge>> &adj_list);
+    inline int get_distance(unsigned int src, unsigned int dest) const { return _dist_matrix[src][dest]; }
 
 };
 

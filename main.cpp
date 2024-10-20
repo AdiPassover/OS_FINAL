@@ -3,6 +3,7 @@
 
 int main(int argc, char* argv[]) {
     std::cout << "Hello world" << std::endl;
+    return 0; // temp
     char server_type;
     if (argc == 1) {
         std::cout << "No arguments provided, starting server with leader follower" << std::endl;
