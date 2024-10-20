@@ -4,7 +4,7 @@
 #include <list>
 #include <algorithm>
 
-const Tree& Kruskal::get_MST(const Graph &graph) const {
+const Tree& Kruskal::find_MST(const Graph &graph) const {
     std::vector<Edge> edges;
     for (unsigned int i = 0; i < graph.num_vertices()-1; i++) {
         for (unsigned int j = i+1; j < graph.num_vertices(); j++) {

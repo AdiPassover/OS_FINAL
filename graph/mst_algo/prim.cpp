@@ -6,7 +6,7 @@ void decrease_key(FibonacciHeap &heap, std::vector<int> &key, unsigned int u, in
     key[u] = new_key;
 }
 
-const Tree& Prim::get_MST(const Graph &graph) const {
+const Tree& Prim::find_MST(const Graph &graph) const {
     std::vector<int> key(graph.num_vertices(), INT_MAX);
     std::vector<unsigned int> parent(graph.num_vertices(), graph.num_vertices());
     FibonacciHeap heap;

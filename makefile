@@ -4,11 +4,12 @@ CXXFLAGS = -Wall -Wextra -std=c++17 -g
 DS_SRC = data_structures/fibonacci_heap.cpp data_structures/union_find.cpp
 MST_SRC = graph/mst_algo/kruskal.cpp graph/mst_algo/prim.cpp
 GRAPH_SRC = graph/graph.cpp graph/tree.cpp
-SERVER_OBJ = server.o
-SRC = $(DS_SRC) $(MST_SRC) $(GRAPH_SRC)
+SERVER_SRC = servers/lf_server.cpp
+MAIN_OBJ = main.o
+SRC = $(DS_SRC) $(MST_SRC) $(GRAPH_SRC) $(SERVER_SRC)
 OBJ = $(SRC:.cpp=.o)
 
-TEST_SRC = tests/test_main.cpp tests/data_structures_tests.cpp
+TEST_SRC = tests/test_main.cpp tests/test_data_structures.cpp tests/test_mst_algos.cpp
 TEST_OBJ = $(TEST_SRC:.cpp=.o)
 
 TARGET = server
@@ -22,7 +23,7 @@ run: $(TARGET)
 
 all: $(TARGET) $(TEST_RUN)
 
-$(TARGET): $(SERVER_OBJ) $(OBJ)
+$(TARGET): $(MAIN_OBJ) $(OBJ)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
 $(TEST_RUN): $(TEST_TARGET)
@@ -35,4 +36,4 @@ $(TEST_TARGET): $(TEST_OBJ) $(OBJ)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJ) $(TARGET) $(TEST_OBJ) $(TEST_TARGET) $(SERVER_OBJ)
+	rm -f $(OBJ) $(TARGET) $(TEST_OBJ) $(TEST_TARGET) $(MAIN_OBJ)
