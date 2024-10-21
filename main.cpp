@@ -1,8 +1,23 @@
 #include <iostream>
 #include "servers/lf_server.hpp"
 
+#include "servers/leader_follower/lf_handler.hpp"
+
 int main(int argc, char* argv[]) {
     std::cout << "Hello world" << std::endl;
+
+    LFHandler lf(5);
+    for (int i = 0; i < 10; i++) {
+        lf.add_task([i]() {
+            std::cout << "Task " + std::to_string(i) + " started\n";
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+            std::cout << "\033[32mTask " + std::to_string(i) + " executed\033[0m\n";
+        });
+    }
+
+    std::this_thread::sleep_for(std::chrono::seconds(3));
+    std::cout << "3 seconds passed\n";
+
     return 0; // temp
     char server_type;
     if (argc == 1) {

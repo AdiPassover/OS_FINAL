@@ -129,7 +129,7 @@ void FibonacciHeap::consolidate(Node* start) {
             _min = current;
         Node* next = current->_right;
         finished = (next == start);
-//        std::cout << "current: " << current->_vertex << " next: " << next->_vertex << " start: " << start->_vertex << std::endl;
+//        std::cout << "current: " << current->_vertex << " next: " << next->_vertex << " start: " << run->_vertex << std::endl;
 //        std::cout << to_string() << std::endl;
 //        print_nodes();
 
