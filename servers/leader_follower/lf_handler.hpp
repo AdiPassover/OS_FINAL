@@ -9,11 +9,11 @@
 #include <condition_variable>
 #include <atomic>
 
-typedef std::function<void()> TaskFunction;
-
 class LFHandler {
 public:
-    explicit LFHandler(unsigned int num_threads);
+    using TaskFunction = std::function<void()>;
+
+    explicit LFHandler(unsigned int num_threads); // automatically runs the handler
     ~LFHandler();
 
     void add_task(const TaskFunction &task);
@@ -30,8 +30,6 @@ private:
     std::mutex _tasks_mutex;
     std::condition_variable _tasks_cv;
     std::atomic<bool> _running;
-//    bool _running;
-//    std::mutex _running_mutex;
 
 };
 

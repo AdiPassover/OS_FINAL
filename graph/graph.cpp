@@ -23,8 +23,8 @@ Graph::Graph(unsigned int num_vertices, unsigned int num_edges, int seed) : Grap
     }
 
     while (edges.size() > num_edges) {
-        unsigned int randomIndex = rand() % edges.size();
-        std::swap(edges[randomIndex], edges.back()); // Swapping so we can use pop_back instead of erasing the mid
+        unsigned int random_index = rand() % edges.size();
+        std::swap(edges[random_index], edges.back()); // Swapping so we can use pop_back instead of erasing the mid
         edges.pop_back();
     }
 
