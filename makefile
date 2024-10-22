@@ -9,7 +9,7 @@ MAIN_OBJ = main.o
 SRC = $(DS_SRC) $(MST_SRC) $(GRAPH_SRC) $(SERVER_SRC)
 OBJ = $(SRC:.cpp=.o)
 
-TEST_SRC = tests/test_main.cpp tests/test_data_structures.cpp tests/test_mst_algos.cpp
+TEST_SRC = tests/test_main.cpp tests/test_data_structures.cpp tests/test_mst_algos.cpp tests/test_handlers.cpp
 TEST_OBJ = $(TEST_SRC:.cpp=.o)
 
 TARGET = server

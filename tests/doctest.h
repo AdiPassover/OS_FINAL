@@ -4546,7 +4546,7 @@ namespace detail {
         // reason, we get a predictable result.
         info.kp_proc.p_flag = 0;
         // Initialize mib, which tells sysctl the info we want, in this case
-        // we're looking for information about a specific process ID.
+        // we're looking for information about a specific run_stage ID.
         mib[0] = CTL_KERN;
         mib[1] = KERN_PROC;
         mib[2] = KERN_PROC_PID;

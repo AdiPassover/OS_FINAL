@@ -81,7 +81,7 @@ Server::~Server() {
     }
 }
 
-Server::Server() : _running(false), _listener(get_listener_socket()), _poll_fds() {
+Server::Server() : _running(false), _listener(get_listener_socket()), _poll_fds(), _client_graphs(0) {
     if (_listener == -1) {
         std::cerr << "Failed to create listener socket: " << strerror(errno) << std::endl;
         exit(1);
@@ -91,7 +91,7 @@ Server::Server() : _running(false), _listener(get_listener_socket()), _poll_fds(
 
 }
 
-std::string Server::process_command(const std::string& command) {
+std::string Server::handle_message(const std::string &command, int sender_fd) {
     return command;
 }
 
@@ -161,8 +161,9 @@ void Server::run() {
                     buf[n_bytes - 1] = '\0';
                     printf("Socket %d sent '%s'\n", sender_fd, buf);
 
-                    std::string response = process_command(buf) + "\n>> ";
-                    send(sender_fd, response.c_str(), response.size(), 0);
+                    handle_message(buf, sender_fd);
+//                    std::string response = handle_message(buf, sender_fd) + "\n>> ";
+//                    send(sender_fd, response.c_str(), response.size(), 0);
                 }
             }
         }
@@ -172,10 +173,38 @@ void Server::run() {
 std::unique_ptr<Server> ServerFactory::get_server(char type) {
     switch (type) {
         case 'l':
-            return std::make_unique<LFServer>();
+            return std::make_unique<LFServer>(5); // TODO magic number
         case 'p':
             return std::make_unique<PipelineServer>();
         default:
             throw std::invalid_argument("Invalid server type. Use 'l' for leader follower or 'p' for pipeline");
     }
 }
+
+LFServer::LFServer(unsigned int num_threads) : Server(), _handler(num_threads) {
+
+}
+
+std::string LFServer::handle_message(const std::string &command, int sender_fd) {
+//    _handler.add_task()
+
+    return "";
+}
+
+PipelineServer::PipelineServer() : Server(), _handler() {
+//    _handler.add_stage();
+}
+
+std::string PipelineServer::handle_message(const std::string &command, int sender_fd) {
+//    _handler.run_pipeline(commandKey, command, sender_fd, );
+
+    return "";
+}
+
+
+
+
+
+
+
+
