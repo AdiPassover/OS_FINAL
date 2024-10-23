@@ -1,6 +1,7 @@
 #ifndef OS_FINAL_GRAPH_HPP
 #define OS_FINAL_GRAPH_HPP
 
+#include <string>
 #include <vector>
 #include <climits>
 
@@ -39,9 +40,11 @@ public:
     bool has_edge(unsigned int u, unsigned int v) const;
     int get_weight(unsigned int u, unsigned int v) const;
 
+    std::string to_string() const;
+
 
 private:
-    const unsigned int _num_vertices;
+    unsigned int _num_vertices;
     std::vector<std::vector<int>> _adj_matrix;
 
 };

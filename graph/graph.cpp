@@ -1,5 +1,6 @@
 #include "graph.hpp"
 #include <stdexcept>
+#include <sstream>
 
 bool Edge::operator<(const Edge &other) const {
     return _weight < other._weight;
@@ -51,4 +52,15 @@ int Graph::get_weight(unsigned int u, unsigned int v) const {
 
 unsigned int Graph::num_vertices() const {
     return _num_vertices;
+}
+
+std::string Graph::to_string() const {
+    std::stringstream ss;
+    for (unsigned int i = 0; i < _num_vertices; i++) {
+        for (unsigned int j = 0; j < _num_vertices; j++) {
+            std::string weight = _adj_matrix[i][j] == NO_EDGE ? "X" : std::to_string(_adj_matrix[i][j]);
+            ss << weight << " ";
+        }
+    }
+    return ss.str();
 }

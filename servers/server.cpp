@@ -91,10 +91,6 @@ Server::Server() : _running(false), _listener(get_listener_socket()), _poll_fds(
 
 }
 
-std::string Server::handle_message(const std::string &command, int sender_fd) {
-    return command;
-}
-
 void Server::run() {
     _running = true;
 
@@ -109,7 +105,7 @@ void Server::run() {
         int poll_count = poll(_poll_fds.data(), _poll_fds.size(), -1);
 
         if (poll_count == -1) {
-            if (errno == EINTR) continue; // TODO
+            if (errno == EINTR) continue;
             perror("poll");
             exit(1);
         }
@@ -131,6 +127,7 @@ void Server::run() {
                     perror("accept");
                 } else {
                     _poll_fds.emplace_back(pollfd{.fd = new_fd, .events = POLLIN, .revents = 0});
+                    _client_graphs.emplace(new_fd, std::make_pair(Graph(), std::make_unique<std::mutex>()));
 
                     printf("New connection from %s on socket %d\n",
                            inet_ntop(remoteaddr.ss_family,
@@ -170,6 +167,12 @@ void Server::run() {
     }
 }
 
+void Server::send_message(int fd, const std::string &message) {
+    if (send(fd, message.c_str(), message.size(), 0) == -1) {
+        perror("send");
+    }
+}
+
 std::unique_ptr<Server> ServerFactory::get_server(char type) {
     switch (type) {
         case 'l':
@@ -180,31 +183,3 @@ std::unique_ptr<Server> ServerFactory::get_server(char type) {
             throw std::invalid_argument("Invalid server type. Use 'l' for leader follower or 'p' for pipeline");
     }
 }
-
-LFServer::LFServer(unsigned int num_threads) : Server(), _handler(num_threads) {
-
-}
-
-std::string LFServer::handle_message(const std::string &command, int sender_fd) {
-//    _handler.add_task()
-
-    return "";
-}
-
-PipelineServer::PipelineServer() : Server(), _handler() {
-//    _handler.add_stage();
-}
-
-std::string PipelineServer::handle_message(const std::string &command, int sender_fd) {
-//    _handler.run_pipeline(commandKey, command, sender_fd, );
-
-    return "";
-}
-
-
-
-
-
-
-
-

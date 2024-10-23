@@ -4,9 +4,11 @@ CXXFLAGS = -Wall -Wextra -std=c++17 -g
 DS_SRC = data_structures/fibonacci_heap.cpp data_structures/union_find.cpp
 MST_SRC = graph/mst_algo/kruskal.cpp graph/mst_algo/prim.cpp
 GRAPH_SRC = graph/graph.cpp graph/tree.cpp
-SERVER_SRC = servers/server.cpp servers/leader_follower/lf_handler.cpp servers/pipeline/pipeline_handler.cpp
+SERVER_SRC = servers/server.cpp servers/client_commands.cpp
+LF_SRC = servers/leader_follower/lf_handler.cpp servers/leader_follower/lf_server.cpp
+PIPE_SRC = servers/pipeline/pipeline_handler.cpp servers/pipeline/pipeline_server.cpp
 MAIN_OBJ = main.o
-SRC = $(DS_SRC) $(MST_SRC) $(GRAPH_SRC) $(SERVER_SRC)
+SRC = $(DS_SRC) $(MST_SRC) $(GRAPH_SRC) $(SERVER_SRC) $(LF_SRC) $(PIPE_SRC)
 OBJ = $(SRC:.cpp=.o)
 
 TEST_SRC = tests/test_main.cpp tests/test_data_structures.cpp tests/test_mst_algos.cpp tests/test_handlers.cpp

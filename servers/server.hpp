@@ -24,13 +24,15 @@ protected:
     bool _running;
     int _listener;
     std::vector<struct pollfd> _poll_fds;
-    std::unordered_map<int, Graph> _client_graphs;
+    std::unordered_map<int, std::pair<Graph, std::unique_ptr<std::mutex>>> _client_graphs;
     std::mutex _graphs_mutex;
+    std::mutex _send_mutex;
 
     inline static constexpr unsigned int BUFFER_SIZE = 1024;
     inline static constexpr unsigned int MAX_CONNECTIONS = 10;
 
-    virtual std::string handle_message(const std::string &command, int sender_fd);
+    virtual void handle_message(const std::string &command, int sender_fd) = 0;
+    static void send_message(int fd, const std::string& message);
     static void *get_in_addr(struct sockaddr *sa);
     static int get_listener_socket();
 
@@ -38,12 +40,12 @@ protected:
 
 class LFServer : public Server {
 public:
-    LFServer(unsigned int num_threads);
+    explicit LFServer(unsigned int num_threads);
 
 protected:
     LFHandler _handler;
 
-    std::string handle_message(const std::string &command, int sender_fd) override;
+    void handle_message(const std::string &command, int sender_fd) override;
 };
 
 class PipelineServer : public Server {
@@ -53,7 +55,7 @@ public:
 protected:
     PipelineHandler _handler;
 
-    std::string handle_message(const std::string &command, int sender_fd) override;
+    void handle_message(const std::string &command, int sender_fd) override;
 };
 
 class ServerFactory {

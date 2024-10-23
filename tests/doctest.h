@@ -896,7 +896,7 @@ struct ContextOptions //!OCLINT too many fields
 
     const detail::TestCase* currentTest = nullptr;
 
-    // == parameters from the command line
+    // == parameters from the Command line
     String   out;       // output filename
     String   order_by;  // how tests should be ordered
     unsigned rand_seed; // the seed for rand ordering
@@ -3506,7 +3506,7 @@ using ticks_t = timer_large_integer::type;
     };
 #endif // DOCTEST_CONFIG_NO_MULTI_LANE_ATOMICS
 
-    // this holds both parameters from the command line and runtime data for tests
+    // this holds both parameters from the Command line and runtime data for tests
     struct ContextState : ContextOptions, TestRunStats, CurrentTestCaseStats
     {
         MultiLaneAtomic<int> numAssertsCurrentTest_atomic;
@@ -6489,7 +6489,7 @@ namespace {
         return parseOptionImpl(argc, argv, pattern, value);
     }
 
-    // locates a flag on the command line
+    // locates a flag on the Command line
     bool parseFlag(int argc, const char* const* argv, const char* pattern) {
         return parseOption(argc, argv, pattern);
     }
@@ -6546,7 +6546,7 @@ namespace {
         option_int
     };
 
-    // parses an int/bool option from the command line
+    // parses an int/bool option from the Command line
     bool parseIntOption(int argc, const char* const* argv, const char* pattern, optionType type,
                         int& res) {
         String parsedValue;
@@ -6726,26 +6726,26 @@ void Context::parseArgs(int argc, const char* const* argv, bool withDefaults) {
     }
 }
 
-// allows the user to add procedurally to the filters from the command line
+// allows the user to add procedurally to the filters from the Command line
 void Context::addFilter(const char* filter, const char* value) { setOption(filter, value); }
 
-// allows the user to clear all filters from the command line
+// allows the user to clear all filters from the Command line
 void Context::clearFilters() {
     for(auto& curr : p->filters)
         curr.clear();
 }
 
-// allows the user to override procedurally the bool options from the command line
+// allows the user to override procedurally the bool options from the Command line
 void Context::setOption(const char* option, bool value) {
     setOption(option, value ? "true" : "false");
 }
 
-// allows the user to override procedurally the int options from the command line
+// allows the user to override procedurally the int options from the Command line
 void Context::setOption(const char* option, int value) {
     setOption(option, toString(value).c_str());
 }
 
-// allows the user to override procedurally the string options from the command line
+// allows the user to override procedurally the string options from the Command line
 void Context::setOption(const char* option, const char* value) {
     auto argv   = String("-") + option + "=" + value;
     auto lvalue = argv.c_str();
@@ -6837,7 +6837,7 @@ int Context::run() {
         return EXIT_SUCCESS;
     };
 
-    // setup default reporter if none is given through the command line
+    // setup default reporter if none is given through the Command line
     if(p->filters[8].empty())
         p->filters[8].push_back("console");
 

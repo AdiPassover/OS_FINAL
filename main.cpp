@@ -26,8 +26,7 @@ int main(int argc, char* argv[]) {
     }
 
     std::cout << "Creating server..." << std::endl;
-    server = std::make_unique<Server>(); // TODO temporary!
-//    server = ServerFactory::get_server(server_type);
+    server = ServerFactory::get_server(server_type);
 
     server->run();
 }

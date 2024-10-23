@@ -11,6 +11,12 @@ public:
         KRUSKAL
     };
 
+    inline static AlgorithmName get_algorithm_name(const std::string &algo) {
+        if (algo == "prim")return PRIM;
+        else if (algo == "kruskal")return KRUSKAL;
+        else throw std::invalid_argument("Invalid algorithm name");
+    }
+
     inline static std::unique_ptr<MST_algorithm> get_algorithm(AlgorithmName algo) {
         switch (algo) {
             case PRIM:
@@ -20,6 +26,10 @@ public:
             default:
                 return nullptr;
         }
+    }
+
+    inline static std::unique_ptr<MST_algorithm> get_algorithm(const std::string& algo) {
+        return get_algorithm(get_algorithm_name(algo));
     }
 
 };
