@@ -58,7 +58,7 @@ std::string ClientCommands::handle_mst(const std::vector<std::string> &args, con
     result.append("Total weight of MST: ").append(std::to_string(tree.get_weight())).append("\n");
     result.append("Longest distance between two vertices: ").append(std::to_string(tree.get_longest_distance())).append("\n");
     result.append("Average distance between two vertices: ").append(std::to_string(tree.get_avg_distance())).append("\n");
-    result.append("Shortest distance between two vertices: ").append(std::to_string(tree.get_shortest_distance())).append("\n");
+    result.append("Shortest distance between two vertices: ").append(std::to_string(tree.get_shortest_distance()));
     return result;
 }
 

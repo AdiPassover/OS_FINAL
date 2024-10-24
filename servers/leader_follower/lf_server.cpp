@@ -23,7 +23,7 @@ std::string process_command(const std::vector<std::string> &args, Graph& graph) 
             return ClientCommands::handle_mst(args, graph);
 
         case ClientCommands::Command::PRINT_GRAPH:
-            return ClientCommands::handle_mst(args, graph);
+            return ClientCommands::handle_print_graph(graph);
 
         case ClientCommands::Command::RANDOM_GRAPH:
             graph = ClientCommands::handle_random_graph(args);

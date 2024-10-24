@@ -37,7 +37,7 @@ public:
 
     static Command get_command(const std::string &command_str);
 
-    static std::vector<std::string> split(const std::string &s, char delim = '\n');
+    static std::vector<std::string> split(const std::string &s, char delim = ' ');
 
     static Graph handle_new_graph(const std::vector<std::string> &args);
     static void handle_add_edge(const std::vector<std::string> &args, Graph& graph);

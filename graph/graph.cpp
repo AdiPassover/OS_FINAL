@@ -60,7 +60,7 @@ std::string Graph::to_string() const {
         for (unsigned int j = 0; j < _num_vertices; j++) {
             std::string weight = _adj_matrix[i][j] == NO_EDGE ? "X" : std::to_string(_adj_matrix[i][j]);
             ss << weight << " ";
-        }
+        } ss << '\n';
     }
     return ss.str();
 }

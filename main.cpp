@@ -9,9 +9,7 @@ void handle_sigint(int sig) {
     server->stop();
 }
 
-#include "servers/leader_follower/lf_handler.hpp"
-
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[]) { // TODO test mst on non connected graphs
     signal(SIGINT, handle_sigint);
 
     char server_type;
