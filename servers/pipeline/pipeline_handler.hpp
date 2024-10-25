@@ -19,8 +19,7 @@ public:
     PipelineHandler& add_stage(const std::string& key, const ProcessFunction& processFunc);
     PipelineHandler& add_consecutive_stages(const std::string& key, const std::initializer_list<ProcessFunction> &processFuncs);
 
-    void run_pipeline(const std::string& key, const std::string& command, int sender_fd, const std::function<void(
-            const std::string &)> &on_end_func);
+    void run_pipeline(const std::string &key, const std::string &command, int sender_fd);
     void stop();
 
 private:
@@ -31,8 +30,7 @@ private:
         explicit PipelineStage(const ProcessFunction& processFunction, const std::shared_ptr<PipelineStage>& next_stage = nullptr);
         ~PipelineStage();
 
-        void run_stage(const std::string& command, int sender_fd, const std::function<void(
-                const std::string &)> &on_end_func);
+        void run_stage(const std::string &command, int sender_fd);
         void stop();
 
     private:

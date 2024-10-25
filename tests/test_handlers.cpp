@@ -28,29 +28,28 @@ TEST_CASE("Pipeline") {
             std::string ans = str;
             for (int i = 0; i < num; i++) ans.append(ans);
             return ans;
-        }
-    }).add_stage("2", [] (const std::string& str, int num) {
+        },
+        [&tasks_done] (const std::string& str, int num) { tasks_done.fetch_add(1, std::memory_order_relaxed); return str; }
+    }).add_stage("2", [&tasks_done] (const std::string& str, int num) {
         std::this_thread::sleep_for(std::chrono::seconds(1));
         std::string ans = str;
         ans[0] = std::to_string(num)[0];
+        tasks_done.fetch_add(1, std::memory_order_relaxed);
         return ans;
     }).add_consecutive_stages("3", {
         [] (const std::string& str, int num) { std::this_thread::sleep_for(std::chrono::seconds(1)); return str; },
         [] (const std::string& str, int num) { std::this_thread::sleep_for(std::chrono::seconds(1)); return str; },
-        [] (const std::string& str, int num) { std::this_thread::sleep_for(std::chrono::seconds(1)); return str; }
+        [] (const std::string& str, int num) { std::this_thread::sleep_for(std::chrono::seconds(1)); return str; },
+        [&tasks_done] (const std::string& str, int num) { tasks_done.fetch_add(1, std::memory_order_relaxed); return str; }
     });
 
-    std::function<void(const std::string &)> on_end = [&tasks_done] (const std::string& str) {
-        tasks_done.fetch_add(1, std::memory_order_relaxed);
-    };
-
-    pipelineHandler.run_pipeline("1", "hello", 3, on_end);
-    pipelineHandler.run_pipeline("2", "what is up", 4, on_end);
-    pipelineHandler.run_pipeline("3", "yo", 5, on_end);
-    pipelineHandler.run_pipeline("3", "goodbye", 6, on_end);
-    pipelineHandler.run_pipeline("3", "goodbye world", 6, on_end);
+    pipelineHandler.run_pipeline("1", "hello", 3);
+    pipelineHandler.run_pipeline("2", "what is up", 4);
+    pipelineHandler.run_pipeline("3", "yo", 5);
+    pipelineHandler.run_pipeline("3", "goodbye", 6);
+    pipelineHandler.run_pipeline("3", "goodbye world", 6);
 
     std::this_thread::sleep_for(std::chrono::seconds(6));
 
-    CHECK(tasks_done == 5);
+    CHECK(tasks_done.load() == 5);
 }

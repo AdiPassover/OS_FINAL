@@ -56,6 +56,9 @@ protected:
     PipelineHandler _handler;
 
     void handle_message(const std::string &command, int sender_fd) override;
+
+private:
+    inline static const std::string INVALID_KEY = "INVALID";
 };
 
 class ServerFactory {

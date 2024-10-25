@@ -52,7 +52,7 @@ void ClientCommands::handle_remove_edge(const std::vector<std::string> &args, Gr
 std::string ClientCommands::handle_mst(const std::vector<std::string> &args, const Graph &graph) {
     if (args.size() != 2) throw std::invalid_argument("Invalid number of arguments for mst");
     std::unique_ptr<MST_algorithm> mst_algo = MST_factory::get_algorithm(args[1]);
-    Tree tree = mst_algo->find_MST(graph);
+    Tree tree = mst_algo->get_MST(graph);
 
     std::string result;
     result.append("Total weight of MST: ").append(std::to_string(tree.get_weight())).append("\n");

@@ -43,16 +43,15 @@ PipelineHandler::PipelineStage& PipelineHandler::PipelineStage::add_task(TaskFun
     return *this;
 }
 
-void PipelineHandler::PipelineStage::run_stage(const std::string &command, int sender_fd,
-                                               const std::function<void(const std::string &)> &on_end_func) {
-    add_task([this, command, sender_fd, on_end_func] {
+void PipelineHandler::PipelineStage::run_stage(const std::string &command, int sender_fd) {
+    add_task([this, command, sender_fd] {
+        std::string response;
         try {
-            std::string response = _process(command, sender_fd);
-            if (_next_stage == nullptr) on_end_func(response);
-            else _next_stage->run_stage(response, sender_fd, on_end_func);
+            response = _process(command, sender_fd);
         } catch (const std::exception& ex) {
-            on_end_func(ex.what());
+            response = ex.what();
         }
+        if (_next_stage != nullptr) _next_stage->run_stage(response, sender_fd);
     });
 }
 
@@ -76,9 +75,8 @@ PipelineHandler& PipelineHandler::add_consecutive_stages(const std::string& key,
     return *this;
 }
 
-void PipelineHandler::run_pipeline(const std::string& key, const std::string& command, int sender_fd, const std::function<void(
-        const std::string &)> &on_end_func) {
-    _pipelines[key]->run_stage(command, sender_fd, on_end_func);
+void PipelineHandler::run_pipeline(const std::string &key, const std::string &command, int sender_fd) {
+    _pipelines[key]->run_stage(command, sender_fd);
 }
 
 void PipelineHandler::stop() {

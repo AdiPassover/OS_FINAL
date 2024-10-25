@@ -40,6 +40,8 @@ public:
     bool has_edge(unsigned int u, unsigned int v) const;
     int get_weight(unsigned int u, unsigned int v) const;
 
+    bool is_connected() const;
+
     std::string to_string() const;
 
 

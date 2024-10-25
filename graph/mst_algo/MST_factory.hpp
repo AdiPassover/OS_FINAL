@@ -2,6 +2,7 @@
 #define OS_FINAL_MST_FACTORY_HPP
 
 #include <memory>
+#include <stdexcept>
 #include "MST_algorithms.hpp"
 
 class MST_factory {

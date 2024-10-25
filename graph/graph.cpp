@@ -1,6 +1,7 @@
 #include "graph.hpp"
 #include <stdexcept>
 #include <sstream>
+#include <queue>
 
 bool Edge::operator<(const Edge &other) const {
     return _weight < other._weight;
@@ -58,9 +59,32 @@ std::string Graph::to_string() const {
     std::stringstream ss;
     for (unsigned int i = 0; i < _num_vertices; i++) {
         for (unsigned int j = 0; j < _num_vertices; j++) {
-            std::string weight = _adj_matrix[i][j] == NO_EDGE ? "X" : std::to_string(_adj_matrix[i][j]);
+            std::string weight = has_edge(i, j) ? "X" : std::to_string(_adj_matrix[i][j]);
             ss << weight << " ";
         } ss << '\n';
     }
     return ss.str();
+}
+
+bool Graph::is_connected() const {
+    std::queue<unsigned int> q;
+    std::vector<bool> visited;
+    unsigned int count = 1;
+    visited[0] = true;
+    q.push(0);
+
+    while (!q.empty()) {
+        unsigned int curr = q.front();
+        q.pop();
+
+        for (unsigned int v = 0; v < _num_vertices; v++) {
+            if (has_edge(curr, v) && !visited[v]) {
+                count++;
+                visited[v] = true;
+                q.push(v);
+            }
+        }
+    }
+
+    return count == _num_vertices;
 }

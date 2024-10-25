@@ -17,7 +17,7 @@ TEST_CASE("MST algorithms") {
     g.add_edge(3,4,4); // <-
 
     SUBCASE("kruskal simple") {
-        Tree t_kruskal = kruskal->find_MST(g);
+        Tree t_kruskal = kruskal->get_MST(g);
         CHECK(t_kruskal.get_weight() == 11);
         CHECK(t_kruskal.get_shortest_distance() == 2);
         CHECK(t_kruskal.get_longest_distance() == 11);
@@ -25,7 +25,7 @@ TEST_CASE("MST algorithms") {
     }
 
     SUBCASE("prim simple") {
-        Tree t_prim = prim->find_MST(g);
+        Tree t_prim = prim->get_MST(g);
         CHECK(t_prim.get_weight() == 11);
         CHECK(t_prim.get_shortest_distance() == 2);
         CHECK(t_prim.get_longest_distance() == 11);
@@ -41,7 +41,7 @@ TEST_CASE("MST algorithms") {
     g2.add_edge(3,4,14); // <-
 
     SUBCASE("kruskal negative edges") {
-        Tree t_kruskal = kruskal->find_MST(g2);
+        Tree t_kruskal = kruskal->get_MST(g2);
         CHECK(t_kruskal.get_weight() == -1);
         CHECK(t_kruskal.get_shortest_distance() == -15);
         CHECK(t_kruskal.get_longest_distance() == 14);
@@ -49,7 +49,7 @@ TEST_CASE("MST algorithms") {
     }
 
     SUBCASE("prim negative edges") {
-        Tree t_prim = prim->find_MST(g2);
+        Tree t_prim = prim->get_MST(g2);
         CHECK(t_prim.get_weight() == -1);
         CHECK(t_prim.get_shortest_distance() == -15);
         CHECK(t_prim.get_longest_distance() == 14);
