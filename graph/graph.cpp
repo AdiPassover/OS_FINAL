@@ -68,7 +68,7 @@ std::string Graph::to_string() const {
 
 bool Graph::is_connected() const {
     std::queue<unsigned int> q;
-    std::vector<bool> visited;
+    std::vector<bool> visited(_num_vertices, false);
     unsigned int count = 1;
     visited[0] = true;
     q.push(0);

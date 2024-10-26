@@ -2,6 +2,7 @@
 #define OS_FINAL_SERVER_HPP
 
 #include <string>
+#include <utility>
 #include <vector>
 #include <memory>
 #include <unordered_map>
@@ -9,6 +10,7 @@
 #include "../graph/graph.hpp"
 #include "leader_follower/lf_handler.hpp"
 #include "pipeline/pipeline_handler.hpp"
+#include "../graph/tree.hpp"
 
 #define PORT "9034"
 
@@ -52,8 +54,23 @@ class PipelineServer : public Server {
 public:
     PipelineServer();
 
+private:
+    struct PipelineData {
+        std::string message;
+        int fd;
+        std::shared_ptr<Tree> tree;
+
+        inline PipelineData(std::string message, int fd) : message(message), fd(fd), tree(nullptr) {}
+        inline PipelineData(std::string error, const PipelineData& other) : message(error), fd(other.fd), tree(nullptr) {}
+        inline PipelineData(const PipelineData& other) = default;
+
+        void set_message(std::string &message) {
+            this->message = message;
+        }
+    };
+
 protected:
-    PipelineHandler _handler;
+    PipelineHandler<PipelineData> _handler;
 
     void handle_message(const std::string &command, int sender_fd) override;
 

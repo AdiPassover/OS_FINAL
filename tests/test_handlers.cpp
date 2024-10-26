@@ -43,11 +43,11 @@ TEST_CASE("Pipeline") {
         [&tasks_done] (const std::string& str, int num) { tasks_done.fetch_add(1, std::memory_order_relaxed); return str; }
     });
 
-    pipelineHandler.run_pipeline("1", "hello", 3);
-    pipelineHandler.run_pipeline("2", "what is up", 4);
-    pipelineHandler.run_pipeline("3", "yo", 5);
-    pipelineHandler.run_pipeline("3", "goodbye", 6);
-    pipelineHandler.run_pipeline("3", "goodbye world", 6);
+    pipelineHandler.run_pipeline("1", "hello");
+    pipelineHandler.run_pipeline("2", "what is up");
+    pipelineHandler.run_pipeline("3", "yo");
+    pipelineHandler.run_pipeline("3", "goodbye");
+    pipelineHandler.run_pipeline("3", "goodbye world");
 
     std::this_thread::sleep_for(std::chrono::seconds(6));
 
