@@ -5,7 +5,7 @@
 PipelineServer::PipelineServer() : Server(), _handler() {
     PipelineHandler<PipelineData>::ProcessFunction send_message_func = [this](const PipelineData& data) -> PipelineServer::PipelineData {
         std::lock_guard<std::mutex> lock(_send_mutex);
-        send_message(data.fd, data.message);
+        send_message(data.fd, data.message + "\n>> ");
         return data;
     };
 
@@ -105,24 +105,6 @@ PipelineServer::PipelineServer() : Server(), _handler() {
                     std::lock_guard<std::mutex> lock(*graph_mutex);
                     new_data.message = ClientCommands::handle_print_graph(graph);
                 }
-                return new_data;
-            }, send_message_func
-
-        }).add_consecutive_stages(ClientCommands::RANDOM_GRAPH_STR,{
-            [this](const PipelineData& data) {
-                std::vector<std::string> args = ClientCommands::split(data.message);
-                Graph new_graph = ClientCommands::handle_random_graph(args);
-
-                std::unique_lock<std::mutex> graphs_lock(_graphs_mutex);
-                auto& [graph, graph_mutex] = _client_graphs[data.fd];
-                graphs_lock.unlock();
-
-                {
-                    std::lock_guard<std::mutex> lock(*graph_mutex);
-                    graph = new_graph;
-                }
-                PipelineData new_data(data);
-                new_data.message = ClientCommands::RANDOM_GRAPH_RES;
                 return new_data;
             }, send_message_func
 

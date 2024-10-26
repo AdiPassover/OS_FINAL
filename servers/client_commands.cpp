@@ -33,12 +33,6 @@ Graph ClientCommands::handle_new_graph(const std::vector<std::string> &args) {
     return g;
 }
 
-Graph ClientCommands::handle_random_graph(const std::vector<std::string> &args) {
-    if (args.size() < 3 || args.size() > 4) throw std::invalid_argument("Invalid number of arguments for random graph");
-    return {static_cast<unsigned int>(stoi(args[1])), static_cast<unsigned int>(stoi(args[2])),
-            args.size() == 4 ? stoi(args[3]) : 42 };
-}
-
 void ClientCommands::handle_add_edge(const std::vector<std::string> &args, Graph &graph) {
     if (args.size() != 4) throw std::invalid_argument("Invalid number of arguments for add edge");
     graph.add_edge(stoi(args[1]), stoi(args[2]), stoi(args[3]));

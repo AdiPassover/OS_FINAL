@@ -14,7 +14,6 @@ public:
     inline static const std::string REMOVE_EDGE_STR = "removeedge";
     inline static const std::string MST_STR = "mst";
     inline static const std::string PRINT_GRAPH_STR = "printgraph";
-    inline static const std::string RANDOM_GRAPH_STR = "randomgraph";
 
     enum Command {
         NEW_GRAPH,
@@ -22,7 +21,6 @@ public:
         REMOVE_EDGE,
         MST,
         PRINT_GRAPH,
-        RANDOM_GRAPH,
         INVALID
     };
 
@@ -32,7 +30,6 @@ public:
             {REMOVE_EDGE_STR, REMOVE_EDGE},
             {MST_STR, MST},
             {PRINT_GRAPH_STR, PRINT_GRAPH},
-            {RANDOM_GRAPH_STR, RANDOM_GRAPH}
     };
 
     static Command get_command(const std::string &command_str);
@@ -44,13 +41,11 @@ public:
     static void handle_remove_edge(const std::vector<std::string> &args, Graph& graph);
     static std::string handle_mst(const std::vector<std::string> &args, const Graph& graph);
     static std::string handle_print_graph(const Graph& graph);
-    static Graph handle_random_graph(const std::vector<std::string> &args);
 
 
     inline static const std::string NEW_GRAPH_RES = "New graph created";
     inline static const std::string ADD_EDGE_RES = "Edge added";
     inline static const std::string REMOVE_EDGE_RES = "Edge removed";
-    inline static const std::string RANDOM_GRAPH_RES = "Random graph created";
     inline static const std::string INVALID_COMMAND_RES = "Invalid command";
 
 

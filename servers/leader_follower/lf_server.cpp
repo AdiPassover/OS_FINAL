@@ -25,10 +25,6 @@ std::string process_command(const std::vector<std::string> &args, Graph& graph) 
         case ClientCommands::Command::PRINT_GRAPH:
             return ClientCommands::handle_print_graph(graph);
 
-        case ClientCommands::Command::RANDOM_GRAPH:
-            graph = ClientCommands::handle_random_graph(args);
-            return ClientCommands::RANDOM_GRAPH_RES;
-
         default:
             return ClientCommands::INVALID_COMMAND_RES;
     }

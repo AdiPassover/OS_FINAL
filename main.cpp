@@ -14,8 +14,10 @@ int main(int argc, char* argv[]) { // TODO test mst on non connected graphs
 
     char server_type;
     if (argc == 1) {
-        std::cout << "No arguments provided, starting server with leader follower" << std::endl;
-        server_type = 'l';
+        while (true) {
+            std::cout << "No arguments provided, write [l] for leader follower or [p] for pipeline:" << std::endl;
+            if (std::cin >> server_type && (server_type == 'l' || server_type == 'p')) break;
+        }
     } else if (argc == 2) {
         server_type = argv[1][1];
     } else {

@@ -36,19 +36,19 @@ Graph::Graph(unsigned int num_vertices, unsigned int num_edges, int seed) : Grap
 
 void Graph::add_edge(unsigned int u, unsigned int v, int weight) {
     if (u == v) throw std::logic_error("Can't have an edge from a vertex to itself");
-    _adj_matrix[u][v] = _adj_matrix[v][u] = weight;
+    _adj_matrix.at(u).at(v) = _adj_matrix.at(v).at(u) = weight;
 }
 
 void Graph::remove_edge(unsigned int u, unsigned int v) {
-    _adj_matrix[u][v] = _adj_matrix[v][u] = NO_EDGE;
+    _adj_matrix.at(u).at(v) = _adj_matrix.at(v).at(u) = NO_EDGE;
 }
 
 bool Graph::has_edge(unsigned int u, unsigned int v) const {
-    return _adj_matrix[u][v] != NO_EDGE;
+    return _adj_matrix.at(u).at(v) != NO_EDGE;
 }
 
 int Graph::get_weight(unsigned int u, unsigned int v) const {
-    return _adj_matrix[u][v];
+    return _adj_matrix.at(u).at(v);
 }
 
 unsigned int Graph::num_vertices() const {
@@ -59,7 +59,7 @@ std::string Graph::to_string() const {
     std::stringstream ss;
     for (unsigned int i = 0; i < _num_vertices; i++) {
         for (unsigned int j = 0; j < _num_vertices; j++) {
-            std::string weight = has_edge(i, j) ? "X" : std::to_string(_adj_matrix[i][j]);
+            std::string weight = !has_edge(i, j) ? "X" : std::to_string(_adj_matrix[i][j]);
             ss << weight << " ";
         } ss << '\n';
     }
