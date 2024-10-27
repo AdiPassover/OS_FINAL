@@ -79,6 +79,7 @@ private:
 };
 
 class ServerFactory {
+    inline static constexpr unsigned int DEFAULT_NUM_THREADS = 5;
 public:
     static std::unique_ptr<Server> get_server(char type);
 };

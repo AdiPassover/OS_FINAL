@@ -54,9 +54,14 @@ coverage: all
 	lcov --remove coverage.info '/usr/*' '*include/c++/*' '*doctest.h' --output-file filtered_coverage.info
 	genhtml filtered_coverage.info --output-directory coverage_report
 
-try: $(TARGET)
-	echo "l" | ./$(TARGET)
+memcheck: $(TARGET)
+	valgrind --leak-check=full --show-leak-kinds=all --log-file=memcheck.txt ./$(TARGET)
 
+helgrind: $(TARGET)
+	valgrind -v --tool=helgrind --log-file=helgrind.txt ./$(TARGET)
+
+cachegrind: $(TARGET)
+	valgrind --tool=cachegrind --log-file=cachegrind.txt ./$(TARGET)
 
 clean_coverage:
 	rm -rf $(ALL_OBJ:.o=.gcda) $(ALL_OBJ:.o=.gcno) filtered_coverage.info coverage.info

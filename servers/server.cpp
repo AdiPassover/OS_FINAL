@@ -176,7 +176,7 @@ void Server::send_message(int fd, const std::string &message) {
 std::unique_ptr<Server> ServerFactory::get_server(char type) {
     switch (type) {
         case 'l':
-            return std::make_unique<LFServer>(5); // TODO magic number
+            return std::make_unique<LFServer>(DEFAULT_NUM_THREADS);
         case 'p':
             return std::make_unique<PipelineServer>();
         default:

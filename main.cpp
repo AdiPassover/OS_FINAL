@@ -7,7 +7,6 @@ std::unique_ptr<Server> server = nullptr;
 void handle_sigint(int sig) {
     std::cout << "\nReceived SIGINT (" << sig << "), shutting down server..." << std::endl;
     if (server != nullptr) server->stop();
-    exit(0);
 }
 
 int main(int argc, char* argv[]) {

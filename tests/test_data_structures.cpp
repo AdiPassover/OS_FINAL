@@ -2,8 +2,6 @@
 #include "../data_structures/union_find.hpp"
 #include "doctest.h"
 
-#include <iostream> // TODO remove
-
 TEST_CASE("Union find") {
     UnionFind uf(10);
     for (unsigned int i = 0; i < 10; i++)
