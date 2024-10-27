@@ -127,7 +127,10 @@ void Server::run() {
                     perror("accept");
                 } else {
                     _poll_fds.emplace_back(pollfd{.fd = new_fd, .events = POLLIN, .revents = 0});
-                    _client_graphs.emplace(new_fd, std::make_pair(Graph(), std::make_unique<std::mutex>()));
+                    {
+                        std::lock_guard<std::mutex> lock(_graphs_mutex);
+                        _client_graphs.emplace(new_fd, std::make_pair(Graph(), std::make_unique<std::mutex>()));
+                    }
 
                     printf("New connection from %s on socket %d\n",
                            inet_ntop(remoteaddr.ss_family,

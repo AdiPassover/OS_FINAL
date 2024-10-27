@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -Wall -Wextra -std=c++17 -g -fprofile-arcs -ftest-coverage
+CXXFLAGS = -Wall -Wextra -std=c++17 -g # -fprofile-arcs -ftest-coverage
 LDFLAGS = -lgcov --coverage
 
 DS_SRC = data_structures/fibonacci_heap.cpp data_structures/union_find.cpp
@@ -58,10 +58,12 @@ memcheck: $(TARGET)
 	valgrind --leak-check=full --show-leak-kinds=all --log-file=memcheck.txt ./$(TARGET)
 
 helgrind: $(TARGET)
-	valgrind -v --tool=helgrind --log-file=helgrind.txt ./$(TARGET)
+	valgrind -v --tool=helgrind --log-file=valgrind_reports/pipe_helgrind.txt ./coverage.sh -p
+	valgrind -v --tool=helgrind --log-file=valgrind_reports/lf_helgrind.txt ./coverage.sh -l
 
 cachegrind: $(TARGET)
-	valgrind --tool=cachegrind --log-file=cachegrind.txt ./$(TARGET)
+	valgrind -v --tool=cachegrind --log-file=valgrind_reports/pipe_cachegrind.txt ./coverage.sh -p
+	valgrind -v --tool=cachegrind --log-file=valgrind_reports/lf_cachegrind.txt ./coverage.sh -l
 
 clean_coverage:
 	rm -rf $(ALL_OBJ:.o=.gcda) $(ALL_OBJ:.o=.gcno) filtered_coverage.info coverage.info
