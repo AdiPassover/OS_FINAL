@@ -1,8 +1,6 @@
 #include "fibonacci_heap.hpp"
 #include <stdexcept>
 
-#include <iostream> // TODO remove
-
 FibonacciHeap::FibonacciHeap() : _size(0), _min(nullptr), _nodes(), _node_of_degree(1) {}
 
 FibonacciHeap::~FibonacciHeap() {
@@ -187,27 +185,27 @@ unsigned int FibonacciHeap::min() const {
     return _min->_vertex;
 }
 
-std::string FibonacciHeap::to_string() const {
-    std::string str1;
-    std::string str2;
-    std::string str3;
-    for (const auto& [vertex, node] : _nodes) {
-        std::string parent = (node->_parent == nullptr) ? "-" : std::to_string(node->_parent->_vertex);
-        str1 += " " + parent + "  ";
-        str2 += " ^  ";
-        std::string key = (node->_key == INT_MAX) ? "$" : std::to_string(node->_key);
-        char mark = (node->_is_marked) ? '!' : ':';
-        str3 += std::to_string(vertex) + mark + key + " ";
-    }
-    std::string title = "heap min: " + std::to_string(_min->_vertex) + " size: " + std::to_string(_size);
-    return title + "\n" + str1 + "\n" + str2 + "\n" + str3;
-}
-
-void FibonacciHeap::print_nodes() const {
-    for (const auto& [vertex, node] : _nodes) {
-        std::cout << node->to_string();
-    }
-}
+//std::string FibonacciHeap::to_string() const {
+//    std::string str1;
+//    std::string str2;
+//    std::string str3;
+//    for (const auto& [vertex, node] : _nodes) {
+//        std::string parent = (node->_parent == nullptr) ? "-" : std::to_string(node->_parent->_vertex);
+//        str1 += " " + parent + "  ";
+//        str2 += " ^  ";
+//        std::string key = (node->_key == INT_MAX) ? "$" : std::to_string(node->_key);
+//        char mark = (node->_is_marked) ? '!' : ':';
+//        str3 += std::to_string(vertex) + mark + key + " ";
+//    }
+//    std::string title = "heap min: " + std::to_string(_min->_vertex) + " size: " + std::to_string(_size);
+//    return title + "\n" + str1 + "\n" + str2 + "\n" + str3;
+//}
+//
+//void FibonacciHeap::print_nodes() const {
+//    for (const auto& [vertex, node] : _nodes) {
+//        std::cout << node->to_string();
+//    }
+//}
 
 FibonacciHeap::Node::~Node() {
     free_children();
@@ -225,19 +223,19 @@ void FibonacciHeap::Node::free_children() {
     }
 }
 
-std::string FibonacciHeap::Node::to_string() const {
-    std::string parent = (_parent == nullptr) ? "-" : std::to_string(_parent->_vertex);
-    std::string key = (_key == INT_MAX) ? "$" : std::to_string(_key);
-    char mark = (_is_marked) ? '!' : ':';
-    std::string child = (_child == nullptr) ? "-" : std::to_string(_child->_vertex);
-    std::string value = std::to_string(_vertex);
-    std::string left = std::to_string(_left->_vertex);
-    std::string right = std::to_string(_right->_vertex);
-
-    std::string ans = "  " + parent + "  \n" +
-                      "  " +   "^"  + "  \n" +
-                      left+"<"+value+mark+key+">"+right+"\n" +
-                      "  " +   "v"  + "  \n" +
-                        "  " + child + "  \n";
-    return ans;
-}
+//std::string FibonacciHeap::Node::to_string() const {
+//    std::string parent = (_parent == nullptr) ? "-" : std::to_string(_parent->_vertex);
+//    std::string key = (_key == INT_MAX) ? "$" : std::to_string(_key);
+//    char mark = (_is_marked) ? '!' : ':';
+//    std::string child = (_child == nullptr) ? "-" : std::to_string(_child->_vertex);
+//    std::string value = std::to_string(_vertex);
+//    std::string left = std::to_string(_left->_vertex);
+//    std::string right = std::to_string(_right->_vertex);
+//
+//    std::string ans = "  " + parent + "  \n" +
+//                      "  " +   "^"  + "  \n" +
+//                      left+"<"+value+mark+key+">"+right+"\n" +
+//                      "  " +   "v"  + "  \n" +
+//                        "  " + child + "  \n";
+//    return ans;
+//}

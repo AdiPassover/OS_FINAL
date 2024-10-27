@@ -28,7 +28,6 @@ private:
 class Graph {
 public:
     explicit Graph(unsigned int n = 0);
-    Graph(unsigned int num_vertices, unsigned int num_edges, int seed);
 
     unsigned int num_vertices() const;
 

@@ -1,6 +1,7 @@
 #include "lf_handler.hpp"
 
 LFHandler::LFHandler(unsigned int num_threads) : _running(true) {
+    run();
     for (unsigned int i = 0; i < num_threads; i++) {
         _threads.emplace_back(&LFHandler::worker_thread, this);
     }

@@ -7,7 +7,7 @@
 
 #include <string>
 
-class FibonacciHeap { // TODO maybe switch to template
+class FibonacciHeap {
 public:
     FibonacciHeap();
     ~FibonacciHeap();
@@ -18,9 +18,6 @@ public:
     void decrease_key(unsigned int vertex, int new_key);
     bool contains(unsigned int vertex) const;
     bool empty() const;
-
-    std::string to_string() const;
-    void print_nodes() const;
 
 private:
     struct Node {
@@ -39,7 +36,6 @@ private:
         ~Node();
 
         void free_children();
-        std::string to_string() const;
     };
 
     unsigned int _size;

@@ -26,7 +26,7 @@ Graph ClientCommands::handle_new_graph(const std::vector<std::string> &args) {
     unsigned int m = stoi(args[2]);
     unsigned int i;
     Graph g(n);
-    for (i = 3; i < args.size(); i += 3) {
+    for (i = 3; i+2 < args.size(); i += 3) {
         g.add_edge(stoi(args[i]), stoi(args[i + 1]), stoi(args[i + 2]));
     }
     if (i != m * 3 + 3) throw std::invalid_argument("Invalid number of arguments for new graph");

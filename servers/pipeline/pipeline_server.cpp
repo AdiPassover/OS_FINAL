@@ -77,18 +77,22 @@ PipelineServer::PipelineServer() : Server(), _handler() {
                 }
                 return new_data;
             }, [this](const PipelineData& data) {
+                if (data.tree == nullptr) return data;
                 PipelineData new_data(data);
                 new_data.message.append("Total weight of MST: ").append(std::to_string(data.tree->get_weight())).append("\n");
                 return new_data;
             }, [this](const PipelineData& data) {
+                if (data.tree == nullptr) return data;
                 PipelineData new_data(data);
                 new_data.message.append("Longest distance between two vertices: ").append(std::to_string(data.tree->get_longest_distance())).append("\n");
                 return new_data;
             }, [this](const PipelineData& data) {
+                if (data.tree == nullptr) return data;
                 PipelineData new_data(data);
                 new_data.message.append("Average distance between two vertices: ").append(std::to_string(data.tree->get_avg_distance())).append("\n");
                 return new_data;
             }, [this](const PipelineData& data) {
+                if (data.tree == nullptr) return data;
                 PipelineData new_data(data);
                 new_data.message.append("Shortest distance between two vertices: ").append(std::to_string(data.tree->get_shortest_distance()));
                 return new_data;
