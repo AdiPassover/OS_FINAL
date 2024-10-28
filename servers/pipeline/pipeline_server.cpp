@@ -121,8 +121,7 @@ void PipelineServer::handle_message(const std::string &command, int sender_fd) {
     if (ClientCommands::get_command(command_key) == ClientCommands::INVALID) {
         PipelineData data(ClientCommands::INVALID_COMMAND_RES, sender_fd);
         _handler.run_pipeline(INVALID_KEY, data);
-    }
-    else {
+    } else {
         PipelineData data(command, sender_fd);
         _handler.run_pipeline(command_key, data);
     }

@@ -15,13 +15,13 @@ int main(int argc, char* argv[]) {
     char server_type;
     if (argc == 1) {
         while (true) {
-            std::cout << "No arguments provided, write [l] for leader follower or [p] for pipeline:" << std::endl;
+            std::cout << "No arguments provided, write [-l] for leader follower or [-p] for pipeline:" << std::endl;
             if (std::cin >> server_type) break;
         }
     } else if (argc == 2) {
         server_type = argv[1][1];
     } else {
-        std::cerr << "Usage: -l for leader follower or -p for pipeline (and only one at a time)" << std::endl;
+        std::cerr << "Usage: [-l] for leader follower or [-p] for pipeline (and only one at a time)" << std::endl;
         return 1;
     }
 

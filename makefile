@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -Wall -Wextra -std=c++17 -g  -fprofile-arcs -ftest-coverage
+CXXFLAGS = -Wall -Wextra -std=c++17 -g # -fprofile-arcs -ftest-coverage ## comment fprofile and ftest when running valgrind
 LDFLAGS = -lgcov --coverage
 
 DS_SRC = data_structures/fibonacci_heap.cpp data_structures/union_find.cpp
@@ -61,9 +61,14 @@ helgrind: $(TARGET)
 	valgrind -v --tool=helgrind --log-file=valgrind_reports/pipe_helgrind.txt ./coverage.sh -p
 	valgrind -v --tool=helgrind --log-file=valgrind_reports/lf_helgrind.txt ./coverage.sh -l
 
-cachegrind: $(TARGET)
-	valgrind -v --tool=cachegrind --log-file=valgrind_reports/pipe_cachegrind.txt ./coverage.sh -p
-	valgrind -v --tool=cachegrind --log-file=valgrind_reports/lf_cachegrind.txt ./coverage.sh -l
+#cachegrind: $(TARGET)
+#	valgrind -v --tool=cachegrind --log-file=valgrind_reports/pipe_cachegrind.txt ./coverage.sh -p
+#	valgrind -v --tool=cachegrind --log-file=valgrind_reports/lf_cachegrind.txt ./coverage.sh -l
+
+callgrind: $(TARGET)  ## to display: kcachegrind <file_name>
+	chmod 0700 /run/user/1000/
+	export $(dbus-launch)
+	valgrind --tool=callgrind ./$(TARGET)
 
 clean_coverage:
 	rm -rf $(ALL_OBJ:.o=.gcda) $(ALL_OBJ:.o=.gcno) filtered_coverage.info coverage.info

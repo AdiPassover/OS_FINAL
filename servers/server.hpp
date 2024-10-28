@@ -63,10 +63,6 @@ private:
         inline PipelineData(std::string message, int fd) : message(message), fd(fd), tree(nullptr) {}
         inline PipelineData(std::string error, const PipelineData& other) : message(error), fd(other.fd), tree(nullptr) {}
         inline PipelineData(const PipelineData& other) = default;
-
-        void set_message(std::string &message) {
-            this->message = message;
-        }
     };
 
 protected:
