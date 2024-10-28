@@ -50,7 +50,6 @@ private:
     };
 
 private:
-    std::atomic<bool> _running;
     std::unordered_map<std::string, std::shared_ptr<PipelineStage>> _pipelines;
 
 
@@ -119,7 +118,7 @@ void PipelineHandler<T>::PipelineStage::run_stage(const T& data) {
 // ===================
 
 template<typename T>
-PipelineHandler<T>::PipelineHandler() : _running(false), _pipelines() {}
+PipelineHandler<T>::PipelineHandler() : _pipelines() {}
 
 template<typename T>
 PipelineHandler<T>::~PipelineHandler() { stop(); }

@@ -17,15 +17,6 @@ void LFHandler::add_task(const TaskFunction &task) {
     _tasks_cv.notify_one();
 }
 
-void LFHandler::add_tasks(const std::initializer_list<TaskFunction> &tasks) {
-    {
-        std::lock_guard<std::mutex> lock(_tasks_mutex);
-        for (const auto &task : tasks)
-            _tasks.push(task);
-    }
-    _tasks_cv.notify_one();
-}
-
 void LFHandler::run() {
     _running = true;
 }

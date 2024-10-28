@@ -185,6 +185,10 @@ unsigned int FibonacciHeap::min() const {
     return _min->_vertex;
 }
 
+int FibonacciHeap::key(unsigned int vertex) const {
+    return _nodes.at(vertex)->_key;
+}
+
 //std::string FibonacciHeap::to_string() const {
 //    std::string str1;
 //    std::string str2;

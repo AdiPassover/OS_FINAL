@@ -18,6 +18,7 @@ public:
     void decrease_key(unsigned int vertex, int new_key);
     bool contains(unsigned int vertex) const;
     bool empty() const;
+    int key(unsigned int vertex) const;
 
 private:
     struct Node {

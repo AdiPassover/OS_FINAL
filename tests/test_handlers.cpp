@@ -11,7 +11,6 @@ TEST_CASE("Leader follower") {
             tasks_done.fetch_add(1, std::memory_order_relaxed);
         });
     }
-    lf.add_tasks({[]() {}, []() {}, []() {}});
     std::this_thread::sleep_for(std::chrono::seconds(3));
     CHECK(tasks_done == 10);
 }

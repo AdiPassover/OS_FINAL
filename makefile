@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -Wall -Wextra -std=c++17 -g # -fprofile-arcs -ftest-coverage
+CXXFLAGS = -Wall -Wextra -std=c++17 -g  -fprofile-arcs -ftest-coverage
 LDFLAGS = -lgcov --coverage
 
 DS_SRC = data_structures/fibonacci_heap.cpp data_structures/union_find.cpp

@@ -17,7 +17,6 @@ public:
     ~LFHandler();
 
     void add_task(const TaskFunction &task);
-    void add_tasks(const std::initializer_list<TaskFunction>& tasks);
     void run();
     void stop();
 
