@@ -1,4 +1,5 @@
 #include "server.hpp"
+#include "Colors.hpp"
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <poll.h>
@@ -162,8 +163,6 @@ void Server::run() {
                     printf("Socket %d sent '%s'\n", sender_fd, buf);
 
                     handle_message(buf, sender_fd);
-//                    std::string response = handle_message(buf, sender_fd) + "\n>> ";
-//                    send(sender_fd, response.c_str(), response.size(), 0);
                 }
             }
         }
@@ -171,9 +170,7 @@ void Server::run() {
 }
 
 void Server::send_message(int fd, const std::string &message) {
-    if (send(fd, message.c_str(), message.size(), 0) == -1) {
-        perror("send");
-    }
+    send(fd, message.c_str(), message.size(), 0);
 }
 
 std::unique_ptr<Server> ServerFactory::get_server(char type) {
