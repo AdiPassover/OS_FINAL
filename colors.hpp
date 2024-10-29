@@ -13,7 +13,8 @@ struct Colors {
     inline static const std::string BLUE = "\033[34m";
     inline static const std::string MAGENTA = "\033[35m";
     inline static const std::string CYAN = "\033[36m";
-    inline static const std::string WHITE = "\033[37m";
+    inline static const std::string LIGHT_CYAN = "\033[96m";
+    inline static const std::string WHITE = "\033[97m";
 
     inline static const std::string RESET_BG = "\033[49m";
     inline static const std::string BLACK_BG = "\033[40m";

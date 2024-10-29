@@ -8,11 +8,8 @@ fi
 make server > /dev/null
 
 ./server $1 > /dev/null &
-sleep 0.01
 ./client.sh inputs/client1.txt > /dev/null &
-sleep 0.01
 ./client.sh inputs/client2.txt > /dev/null &
-sleep 0.01
 ./client.sh inputs/client3.txt > /dev/null &
 sleep 1
 killall -2 server

@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -Wall -Wextra -std=c++17 -g # -fprofile-arcs -ftest-coverage ## comment fprofile and ftest when running valgrind
+CXXFLAGS = -Wall -Wextra -std=c++17 -g  -fprofile-arcs -ftest-coverage ## comment fprofile and ftest when running valgrind
 LDFLAGS = -lgcov --coverage
 
 DS_SRC = data_structures/fibonacci_heap.cpp data_structures/union_find.cpp
@@ -21,7 +21,7 @@ TEST_RUN = test
 
 ALL_OBJ = $(MAIN_OBJ) $(OBJ) $(TEST_OBJ)
 
-.PHONY: run $(TEST_RUN) all clean coverage clean_coverage clean_all
+.PHONY: run $(TEST_RUN) all clean coverage clean_coverage clean_all memcheck helgrind callgrind
 
 run: $(TARGET)
 	./$(TARGET)

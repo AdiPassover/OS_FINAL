@@ -1,5 +1,5 @@
 #include "server.hpp"
-#include "Colors.hpp"
+#include "../colors.hpp"
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <poll.h>
@@ -11,6 +11,10 @@
 #include <string.h>
 #include <iostream>
 #include <utility>
+
+void print_error(const std::string& message) {
+    std::cerr << Colors::RED_BG << message << ": " << strerror(errno) << Colors::RESET_BG << std::endl;
+}
 
 
 void *Server::get_in_addr(struct sockaddr *sa) {
@@ -84,7 +88,7 @@ Server::~Server() {
 
 Server::Server() : _running(false), _listener(get_listener_socket()), _poll_fds(), _client_graphs(0) {
     if (_listener == -1) {
-        std::cerr << "Failed to create listener socket: " << strerror(errno) << std::endl;
+        print_error("Failed to create listener socket");
         exit(1);
     }
 
@@ -107,7 +111,7 @@ void Server::run() {
 
         if (poll_count == -1) {
             if (errno == EINTR) continue;
-            perror("poll");
+            print_error("poll");
             exit(1);
         }
 
@@ -125,7 +129,7 @@ void Server::run() {
                                     &addrlen);
 
                 if (new_fd == -1) {
-                    perror("accept");
+                    print_error("accept");
                 } else {
                     _poll_fds.emplace_back(pollfd{.fd = new_fd, .events = POLLIN, .revents = 0});
                     {
@@ -133,11 +137,10 @@ void Server::run() {
                         _client_graphs.emplace(new_fd, std::make_pair(Graph(), std::make_unique<std::mutex>()));
                     }
 
-                    printf("New connection from %s on socket %d\n",
-                           inet_ntop(remoteaddr.ss_family,
-                                     get_in_addr((struct sockaddr*)&remoteaddr),
-                                     remoteIP, INET6_ADDRSTRLEN),
-                           new_fd);
+                    std::cout << Colors::GREEN
+                              << "New connection from " <<  inet_ntop(remoteaddr.ss_family,get_in_addr((struct sockaddr*)&remoteaddr), remoteIP, INET6_ADDRSTRLEN)
+                              << " on socket " << new_fd << Colors::RESET << std::endl;
+
                     send(new_fd, ">> ", 3, 0);
                 }
             } else {
@@ -149,9 +152,9 @@ void Server::run() {
                 if (n_bytes <= 0) {
                     if (n_bytes == 0) {
                         // Connection closed
-                        printf("Socket %d hung up\n", sender_fd);
+                        std::cout << Colors::MAGENTA << "Socket " << sender_fd << " hung up" << Colors::RESET << std::endl;
                     } else {
-                        perror("recv");
+                        print_error("recv");
                     }
                     close(poll_fd.fd); // Bye!
                     std::swap(_poll_fds[i], _poll_fds.back());
@@ -160,7 +163,8 @@ void Server::run() {
                 } else {
                     // We got some good data from a client
                     buf[n_bytes - 1] = '\0';
-                    printf("Socket %d sent '%s'\n", sender_fd, buf);
+                    std::cout << Colors::CYAN << "Socket " << sender_fd << " sent " << Colors::RESET
+                              << Colors::LIGHT_CYAN << buf << Colors::RESET << std::endl;
 
                     handle_message(buf, sender_fd);
                 }
