@@ -28,10 +28,8 @@ private:
     std::list<std::thread> _threads;
     std::mutex _tasks_mutex;
     std::condition_variable _tasks_cv;
-//    std::atomic<bool> _running;
     bool _running;
-    unsigned int _leader_id;
-    unsigned int _num_threads;
+    bool _leader_free;
 
 };
 
