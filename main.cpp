@@ -16,7 +16,7 @@ int main(int argc, char* argv[]) {
     char server_type;
     if (argc == 1) {
         while (true) {
-            std::cout << Colors::YELLOW << "No arguments provided, write [-l] for leader follower or [-p] for pipeline:" << Colors::RESET << std::endl;
+            std::cout << Colors::YELLOW << "No arguments provided, write [l] for leader follower or [p] for pipeline:" << Colors::RESET << std::endl;
             if (std::cin >> server_type) break;
         }
     } else if (argc == 2) {

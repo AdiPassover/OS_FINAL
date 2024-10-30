@@ -32,10 +32,10 @@ private:
         ~PipelineStage();
 
         void run_stage(const T& data);
+        void run();
         void stop();
 
     private:
-        void run();
         PipelineStage& add_task(TaskFunction task); // returns reference to itself for chaining
 
     private:
