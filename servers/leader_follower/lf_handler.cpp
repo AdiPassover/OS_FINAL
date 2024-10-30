@@ -1,9 +1,9 @@
 #include "lf_handler.hpp"
 
-LFHandler::LFHandler(unsigned int num_threads) : _running(true), _leader_id(0), _num_threads(num_threads) {
+LFHandler::LFHandler(unsigned int num_threads) : _running(true), _leader_free(true) {
     run();
     for (unsigned int i = 0; i < num_threads; i++) {
-        _threads.emplace_back(&LFHandler::worker_thread, this, i);
+        _threads.emplace_back(&LFHandler::worker_thread, this);
     }
 }
 
@@ -33,19 +33,20 @@ void LFHandler::stop() {
     }
 }
 
-void LFHandler::worker_thread(unsigned int id) {
+void LFHandler::worker_thread() {
     while (true) {
         TaskFunction task;
         {
-            std::unique_lock<std::mutex> lock(_tasks_mutex);
-            _tasks_cv.wait(lock, [this, id] { return !_running || (!_tasks.empty() && _leader_id == id); });
+            std::unique_lock<std::mutex> lock(_tasks_mutex); // guard
+            _tasks_cv.wait(lock, [this] { return !_running || (!_tasks.empty() && _leader_free); });
+            _leader_free = false;
 
             if (!_running && _tasks.empty()) return;
             if (_tasks.empty()) continue;
 
             task = std::move(_tasks.front());
             _tasks.pop();
-            _leader_id = (_leader_id + 1) % _num_threads;
+            _leader_free = true;
             _tasks_cv.notify_one();
         }
 
